@@ -1,0 +1,82 @@
+# golangci-lint configuration for icloud-pull.
+#
+# Adapted from cmdguard's config with the following differences:
+#   - gocyclo threshold is lower (30 vs 70): icloud-pull has no giant
+#     CLI dispatchers; 30 is a reasonable ceiling for a ~200-line tool.
+#   - Same linter philosophy: real-bug catchers ON, style linters as
+#     regression fences.
+#
+# Run:    golangci-lint run ./...
+# Update: golangci-lint config verify
+version: "2"
+
+linters:
+  default: none
+  enable:
+    # ── Built-ins that always pay off ──────────────────────────
+    - errcheck        # unchecked error returns
+    - govet           # official go vet rules
+    - ineffassign     # assignments whose result is never read
+    - staticcheck     # SA-/ST-/QF- rules
+    - unused          # dead code
+
+    # ── Security & correctness ─────────────────────────────────
+    - gosec            # security checks (path traversal, hardcoded creds, …)
+    - errorlint        # errors.As/Is/wrap instead of == / type-assertion
+    - nilerr           # dropped errors in error branches
+    - nilnil           # simultaneous nil error + invalid value
+    - exhaustive       # missing cases in switch
+    - wastedassign     # assignments overwritten before read
+    - reassign         # package-level reassignments
+    - unparam          # unused function parameters
+
+    # ── Input validation & safety ──────────────────────────────
+    - bidichk          # dangerous Unicode (trojan source)
+    - asciicheck       # non-ASCII identifiers
+    - gocheckcompilerdirectives  # malformed //go: directives
+
+    # ── Modernisation (Go 1.22–1.26 idioms) ───────────────────
+    - modernize        # CutPrefix, slices.Contains, min(), any, …
+    - intrange         # for i := range N
+    - copyloopvar     # Go 1.22+ loop variable capture
+
+    # ── Performance ────────────────────────────────────────────
+    - prealloc         # preallocate slices when size is known
+    - perfsprint       # fmt.Sprintf -> strconv where applicable
+
+    # ── Meta-linter ────────────────────────────────────────────
+    - nolintlint       # validate //nolint directives
+
+    # ── Style & polish (regression fence) ─────────────────────
+    - misspell         # typos in comments/strings
+    - gocritic         # style/perf/bug-prone patterns
+    - unconvert        # unnecessary type conversions
+    - predeclared     # shadowing predeclared identifiers
+    - forcetypeassert  # unchecked type assertions
+    - dupword          # duplicate words in comments
+    - godot            # comments should end with a period
+    - errname          # error variables should be named ErrXxx
+    - dupl             # duplicate code blocks
+    - makezero         # make() with non-zero length + append
+
+    # ── Complexity ─────────────────────────────────────────────
+    - gocyclo
+
+  settings:
+    gocyclo:
+      # icloud-pull is a small tool; 30 is a reasonable ceiling.
+      # If a function exceeds this, it likely needs decomposition.
+      min-complexity: 30
+
+  exclusions:
+    rules:
+      # Test files: relax error-checking and style rules.
+      - path: _test\.go
+        linters:
+          - errcheck
+          - gosec
+          - forcetypeassert
+          - prealloc
+          - gocyclo
+          - wastedassign
+          - unparam

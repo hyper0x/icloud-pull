@@ -72,15 +72,12 @@ icloud-pull status --json ~/path/to/vault
 - **Batch download** — triggers APFS transparent fetch via single-byte reads, with configurable concurrency (goroutines)
 - **Progress feedback** — real-time progress bar showing files downloaded / remaining / failed
 - **JSON output** — machine-readable format for AI agents, scripts, and CI pipelines
-- **Single binary** — no dependencies, no Xcode, no Homebrew formula required (but we'll provide one)
+- **Single binary** — no dependencies, no Xcode required
 - **macOS only** — this is an APFS/iCloud feature; the tool will clearly error on other platforms
 
 ## Installation
 
 ```bash
-# Homebrew (coming soon)
-brew install hyper0x/tap/icloud-pull
-
 # Build from source
 go install github.com/hyper0x/icloud-pull@latest
 
