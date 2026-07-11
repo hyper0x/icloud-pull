@@ -43,7 +43,7 @@ func Run(args []string) int {
 		fmt.Println()
 		fmt.Print(msg.Usage)
 		return 0
-	case "--version", "version":
+	case "--version", "-v", "version":
 		fmt.Printf("icloud-pull %s (commit: %s)\n", Version, Commit)
 		return 0
 	case "status":
