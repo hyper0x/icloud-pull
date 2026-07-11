@@ -54,10 +54,10 @@ This is the core mechanism `icloud-pull` is built on — simple, fast, and depen
 
 ```bash
 # Scan a directory for evicted files
-icloud-pull status ~/Library/Mobile\ Documents/iCloud~md~obsidian/Documents/Economist
+icloud-pull status ~/Library/Mobile\ Documents/iCloud~md~obsidian/Documents/MyVault
 
 # Download all evicted files in a directory (recursively)
-icloud-pull download ~/Library/Mobile\ Documents/iCloud~md~obsidian/Documents/Economist
+icloud-pull download ~/Library/Mobile\ Documents/iCloud~md~obsidian/Documents/MyVault
 
 # Download with concurrency control
 icloud-pull download --concurrency 10 ~/path/to/vault
